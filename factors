@@ -1,54 +1,28 @@
-#!/usr/bin/python3
-"""
-Module that factorizes as many numbers as possible
-into a product of two smaller numbers using optimized trial division.
-"""
+#!/usr/bin/env bash
 
-from sys import argv
-from math import isqrt
+check_factor() {
+    local num1=$1
+    local num2=$2
+    local original_number=$3
 
-def factorize(value):
-    """
-    Print a simple decomposition of an integer > 1 using optimized trial division.
-    Args:
-        value (int): The integer to be factorized.
-    """
-    if value < 2:
-        return
+    if ((num2 > num1))
+    then
+    echo "$original_number=$num2*$num1"
+    else
+    echo "$original_number=$num1*$num2"
+    fi
+}
 
-    # Optimize trial division for smaller numbers
-    i = 2
-    limit = isqrt(value) + 1
-
-    while i <= limit:
-        if value % i == 0:
-            print("{:.0f}={:.0f}*{:.0f}".format(value, i, value // i))
-            return
-        i += 1
-
-    # If no factors found, value is prime
-    print("{:.0f}={:.0f}*1".format(value, value))
-
-def main():
-    """
-    Main function to read numbers from a file and factorize them.
-    """
-    if len(argv) != 2:
-        print("Usage: {} <filename>".format(argv[0]))
-        exit("Incorrect usage. Please provide a filename.")
-
-    try:
-        with open(argv[1]) as file:
-            line = file.readline()
-
-            while line != "":
-                value = int(line.strip())
-                factorize(value)
-                line = file.readline()
-    except FileNotFoundError:
-        exit(f"Error: File '{argv[1]}' not found.")
-    except ValueError:
-        exit("Error: Invalid content in the file. Please provide valid integers.")
-
-if __name__ == "__main__":
-    main()
+if ["$#" -ne 1]
+then
+echo 'Usage: factors <file>'
+exit 1
+else
+while read -r i
+do
+result=$(factor "$i")
+num1=$(echo "$result" | awk '{print $2}')
+num2=$(echo "$result" | awk '{print $3}')
+check_factor "$num1" "$num2" "$i"
+done < "$1"
+fi
