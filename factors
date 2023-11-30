@@ -5,21 +5,24 @@ check_factor() {
     local num2=$2
     local original_number=$3
 
-    if ((num2 > num1)); then
-        echo "$original_number=$num2*$num1"
+    if ((num2 > num1))
+    then
+    echo "$original_number=$num2*$num1"
     else
-        echo "$original_number=$num1*$num2"
+    echo "$original_number=$num1*$num2"
     fi
 }
 
-if [ $# -ne 1 ]; then
-    echo 'Usage: factors <file>'
-    exit 1
-fi
-
-while read -r i; do
-    result=$(factor "$i")
-    num1=$(echo "$result" | awk '{print $2}')
-    num2=$(echo "$result" | awk '{print $3}')
-    check_factor "$num1" "$num2" "$i"
+if ["$#" -ne 1]
+then
+echo 'Usage: factors <file>'
+exit 1
+else
+while read -r i
+do
+result=$(factor "$i")
+num1=$(echo "$result" | awk '{print $2}')
+num2=$(echo "$result" | awk '{print $3}')
+check_factor "$num1" "$num2" "$i"
 done < "$1"
+fi
